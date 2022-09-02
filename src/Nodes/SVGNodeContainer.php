@@ -10,7 +10,7 @@ use SVG\Utilities\SVGStyleParser;
 /**
  * Represents an SVG image element that contains child elements.
  */
-abstract class SVGNodeContainer extends SVGNode
+abstract class SVGNodeContainer extends SVGNode implements \JsonSerializable
 {
     /** @var SVGNode[] $children This node's child nodes. */
     protected $children;
@@ -274,5 +274,14 @@ abstract class SVGNodeContainer extends SVGNode
         }
 
         return $result;
+    }
+
+    public function jsonSerialize(): mixed
+    {
+      $a = parent::jsonSerialize();
+      if($this->children){
+        $a['children'] = $this->children;
+      }
+      return $a;
     }
 }

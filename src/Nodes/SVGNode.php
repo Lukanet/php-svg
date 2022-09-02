@@ -8,7 +8,7 @@ use SVG\Rasterization\SVGRasterizer;
  * Represents a single element inside an SVG image (in other words, an XML tag).
  * It stores hierarchy info, as well as attributes and styles.
  */
-abstract class SVGNode
+abstract class SVGNode implements \JsonSerializable
 {
     /** @var SVGNodeContainer $parent The parent node. */
     protected $parent;
@@ -338,5 +338,15 @@ abstract class SVGNode
     public function getElementsByClassName($className, array &$result = array())
     {
         return $result;
+    }
+
+    public function jsonSerialize(): mixed
+    {
+      foreach (['attributes','styles','value'] as $p){
+        if($this->$p){
+          $a[$p] = $this->$p;
+        }
+      }
+      return $a??[];
     }
 }
